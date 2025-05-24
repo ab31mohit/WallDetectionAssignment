@@ -19,7 +19,7 @@ class WallDetector:
         """
         Initialize the wall detector with fixed parameters.
         """
-        # RANSAC parameters
+        # RANSAC parameters tuned through experimentation
         self.distance_threshold = 0.02
         self.ransac_n = 3
         self.num_iterations = 1000
@@ -38,15 +38,7 @@ class WallDetector:
         self.processed_cloud = None
         
     def load_point_cloud(self, file_path: str) -> o3d.geometry.PointCloud:
-        """
-        Load a point cloud from file.
-        
-        Args:
-            file_path: Path to the .pcd file
-            
-        Returns:
-            Open3D point cloud object
-        """
+        """Loads point cloud data from file"""
         if not os.path.exists(file_path):
             raise FileNotFoundError(f"Point cloud file not found: {file_path}")
             
@@ -61,15 +53,7 @@ class WallDetector:
         return cloud
     
     def preprocess_point_cloud(self, cloud: o3d.geometry.PointCloud) -> o3d.geometry.PointCloud:
-        """
-        Preprocess the point cloud: remove outliers, downsample if needed.
-        
-        Args:
-            cloud: Input point cloud
-            
-        Returns:
-            Preprocessed point cloud
-        """
+        """Cleans and prepares the point cloud for analysis"""
         print("Preprocessing point cloud...")
         
         # Remove statistical outliers
@@ -112,31 +96,14 @@ class WallDetector:
         return angle_from_vertical <= self.max_wall_angle
     
     def get_plane_height(self, points: np.ndarray) -> float:
-        """
-        Calculate the height (z-range) of points in a plane.
-        
-        Args:
-            points: Array of 3D points
-            
-        Returns:
-            Height of the plane (max_z - min_z)
-        """
+        """Calculate the height (z-range) of points in a plane"""
         if len(points) == 0:
             return 0.0
         z_coords = points[:, 2]
         return np.max(z_coords) - np.min(z_coords)
     
     def calculate_plane_dimensions(self, points: np.ndarray, plane_model: np.ndarray) -> Tuple[float, float, float]:
-        """
-        Calculate the width, height, and area of a plane.
-        
-        Args:
-            points: Array of 3D points belonging to the plane
-            plane_model: Plane equation coefficients [a, b, c, d]
-            
-        Returns:
-            Tuple of (width, height, area)
-        """
+        """Estimates width, height and area of detected plane"""
         if len(points) < 3:
             return 0.0, 0.0, 0.0
         
@@ -201,16 +168,7 @@ class WallDetector:
         return width, height, area
     
     def is_valid_wall(self, points: np.ndarray, plane_model: np.ndarray) -> Tuple[bool, Dict]:
-        """
-        Check if a detected plane is a valid wall based on multiple criteria.
-        
-        Args:
-            points: Array of 3D points belonging to the plane
-            plane_model: Plane equation coefficients
-            
-        Returns:
-            Tuple of (is_valid, criteria_dict)
-        """
+        """Validates if detected plane meets all wall criteria"""
         # Basic checks
         is_vertical = self.is_vertical_plane(plane_model)
         width, height, area = self.calculate_plane_dimensions(points, plane_model)
@@ -238,15 +196,7 @@ class WallDetector:
         return is_valid, criteria
     
     def segment_planes(self, cloud: o3d.geometry.PointCloud) -> List[Dict]:
-        """
-        Segment planes from the point cloud using RANSAC.
-        
-        Args:
-            cloud: Input point cloud
-            
-        Returns:
-            List of dictionaries containing plane information
-        """
+        """Finds planes in point cloud using RANSAC algorithm"""
         print("Starting plane segmentation...")
         
         planes = []
@@ -302,15 +252,7 @@ class WallDetector:
         return planes
     
     def detect_walls(self, file_path: str) -> List[Dict]:
-        """
-        Main method to detect walls in a point cloud.
-        
-        Args:
-            file_path: Path to the point cloud file
-            
-        Returns:
-            List of detected wall information
-        """
+        """Main detection pipeline"""
         # Load and preprocess point cloud
         cloud = self.load_point_cloud(file_path)
         cloud = self.preprocess_point_cloud(cloud)
