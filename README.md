@@ -59,20 +59,39 @@ The [wall_detection.py](wall_detection.py) script :
 
 ## Results  
 
-1.  The raw input point cloud data
-    <div align="center">
-      <img src="input_point_cloud.png" alt="Raw input point cloud data" />
-    </div>     
+- ### For [pointcloud.pcd](pointcloud.pcd) file 
 
-2.  The detected walls within the pointcloud data    
-    <div align="center">
-      <img src="wall_detection_results/wall_detection_result.png" alt="Detected walls within point cloud" />
-    </div>     
+    1.  The raw input point cloud data
+        <div align="left">
+        <img src="pointcloud_raw.png" alt="Raw input point cloud data" />
+        </div>     
 
-3. Point cloud data of detected walls    
-    <div align="center">
-      <img src="wall_detection_results/all_walls_combined.png" alt="Point cloud data of detected walls" />
-    </div>    
+    <!-- 2.  The detected walls within the pointcloud data    
+        <div align="left">
+        <img src="wall_detection_results/pointcloud_results/wall_detection_result.png" alt="Detected walls within point cloud" />
+        </div>      -->
+
+    2. Point cloud data of detected walls    
+        <div align="left">
+        <img src="wall_detection_results/pointcloud_results/all_walls_combined.png" alt="Point cloud data of detected walls" />
+        </div>       
+
+- ### For [accumulated_pcl_site.pcd](accumulated_pcl_site.pcd) file 
+
+    1.  The raw input point cloud data
+        <div align="left">
+        <img src="accumulated_pcl_site_raw.png" alt="Raw input point cloud data" />
+        </div>     
+
+    <!-- 2.  The detected walls within the pointcloud data    
+        <div align="left">
+        <img src="wall_detection_results/pointcloud_results/wall_detection_result.png" alt="Detected walls within point cloud" />
+        </div>      -->
+
+    2. Point cloud data of detected walls    
+        <div align="left">
+        <img src="wall_detection_results/accumulated_pcl_site_results/all_walls_combined.png" alt="Point cloud data of detected walls" />
+        </div>    
 
 ## Methodology 
 

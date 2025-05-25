@@ -317,19 +317,26 @@ class WallDetector:
             height=800
         )
     
-    def save_results(self):
+    def save_results(self, file_path: str):
         """
-        Save the detection results to files in wall_detection_results folder.
+        Save the detection results to files in wall_detection_results/[input_filename] folder.
         """
         if not self.walls:
             print("No walls to save")
             return
         
-        # Create results directory
-        results_dir = "wall_detection_results"
-        if not os.path.exists(results_dir):
-            os.makedirs(results_dir)
-            
+        # Create main results directory if needed
+        main_results_dir = "wall_detection_results"
+        if not os.path.exists(main_results_dir):
+            os.makedirs(main_results_dir)
+        
+        # Create subdirectory named after input file (without extension)
+        input_filename = os.path.splitext(os.path.basename(file_path))[0]
+        results_dir = os.path.join(main_results_dir, f"{input_filename}_results")
+        
+        # Create the specific results directory (or use existing)
+        os.makedirs(results_dir, exist_ok=True)
+        
         print(f"Saving results to {results_dir}/...")
         
         # Save individual wall point clouds
@@ -417,7 +424,7 @@ def main():
         detector.visualize_results()
         
         # Save results
-        detector.save_results()
+        detector.save_results(args.input_file)
         
         print(f"\nWall detection completed successfully!")
         print(f"Found {len(walls)} walls in the point cloud.")
